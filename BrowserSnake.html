@@ -48,18 +48,6 @@
   <div id="instructions" class="text"><br /><b>[Key Commands]</b><br />Load Fully Evolved Archive: [CTRL]<br />Speed Up: [E]<br />Slow Down: [D]<br />Toggle AI: [A]<br />Move Snake: [Arrow Keys]<br />Get Archive: [G]<br />Load Archive: [R]<br /></div>
   <div id="signature" class="text">Created By Eric Lee<br />Questions? Just ask!<br /><a href="mailto:ericlovesmath@gmail.com" target="_top">ericlovesmath@gmail.com</a></div>
   <script src="./SnakeAI.js"></script>
-  <script>
-    $(window).keydown(function (e){
-      if (e.ctrlKey) {
-        var archiveJSON = $.ajax({
-          url: "./archive.json",
-          async: false
-        }).responseText;
-        loadArchive(archiveJSON);
-        alert("Archive loaded successfully!");
-      }
-    });
-  </script>
   <script type="text/javascript">
   </script>
 </body>
