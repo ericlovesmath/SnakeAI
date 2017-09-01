@@ -19,28 +19,17 @@ Direction = "Right"
 function game() {
 	PlayerX += XVelocity;
 	PlayerY += YVelocity;
-	if (PlayerX < 0) {
-		PlayerX = tc - 1;
-	}
-	if (PlayerX > tc - 1) {
-		PlayerX = 0;
-	}
-	if (PlayerY < 0) {
-		PlayerY = tc - 1;
-	}
-	if (PlayerY > tc - 1) {
-		PlayerY = 0;
-	}
 	ctx.fillStyle = "black";
 	ctx.fillRect(0, 0, canv.width, canv.height);
 
 	ctx.fillStyle = "lime";
 	for (var i = 0; i < trail.length; i++) {
 		ctx.fillRect(trail[i].x * GridSize, trail[i].y * GridSize, GridSize - 2, GridSize - 2);
-		if (trail[i].x == PlayerX && trail[i].y == PlayerY) {
+		if ((trail[i].x == PlayerX && trail[i].y == PlayerY) || (PlayerX==0) || (PlayerX==tc+1) || (PlayerY==0) || (PlayerY==tc+1)) {
 			tail = 5; trail = [];
-			XVelocity = 0; YVelocity = 0;
+			XVelocity = 1; YVelocity = 0;
 			PlayerX = PlayerY = 10;
+			console.log("Snake Death");
 		}
 	}
 	trail.push({ x: PlayerX, y: PlayerY });
@@ -62,70 +51,39 @@ function game() {
 }
 
 function GetInputs() {
-	var HeadLeft = HeadRight = HeadUp = HeadDown = 1;
+	var HeadLeft = HeadRight = HeadUp = HeadDown = 0;
 	inputs = [];
 	FPlayerX = PlayerX + XVelocity;
 	FPlayerY = PlayerY + YVelocity;
-	if (FPlayerX < 0) {
-		FPlayerX = tc - 1;
-	}
-	if (FPlayerX > tc - 1) {
-		FPlayerX = 0;
-	}
-	if (FPlayerY < 0) {
-		FPlayerY = tc - 1;
-	}
-	if (FPlayerY > tc - 1) {
-		FPlayerY = 0;
-	}
 	inputs.push(Math.sqrt(Math.pow(FPlayerX - AppleX, 2) + Math.pow(FPlayerY - AppleY, 2)));
 
 	for (var i = 1; i < trail.length; i++) {
 		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY + 1) {
-			console.log("Down");
-			HeadDown = 0;
+			HeadDown = -1;
 		}
 		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY - 1) {
-			HeadUp = 0;
-			console.log("Up");
+			HeadUp = -1;
 		}
 		if (trail[i].x == FPlayerX - 1 && trail[i].y == FPlayerY) {
-			HeadLeft = 0;
-			console.log("Left");
+			HeadLeft = -1;
 		}
 		if (trail[i].x == FPlayerX + 1 && trail[i].y == FPlayerY) {
-			HeadRight = 0;
-			console.log("Right");
+			HeadRight = -1;
+		}
+		if (AppleX == FPlayerX && AppleY == FPlayerY + 1) {
+			HeadDown = 1;
+		}
+		if (AppleX == FPlayerX && AppleY == FPlayerY - 1) {
+			HeadUp = 1;
+		}
+		if (AppleX == FPlayerX - 1 && AppleY == FPlayerY) {
+			HeadLeft = 1;
+		}
+		if (AppleX == FPlayerX + 1 && AppleY == FPlayerY) {
+			HeadRight = 1;
 		}
 	}
-	console.log(HeadLeft, HeadRight, HeadUp, HeadDown);
-	RandDir = [];
-	if (HeadLeft == 1) {
-		RandDir.push("Left");
-	}
-	if (HeadRight == 1) {
-		RandDir.push("Right");
-	}
-	if (HeadUp == 1) {
-		RandDir.push("Up");
-	}
-	if (HeadDown == 1) {
-		RandDir.push("Down");
-	}
-	console.log(RandDir);
-	shuffle(RandDir);
-	if (RandDir[0] == "Left") {
-		XVelocity = -1; YVelocity = 0;
-	}
-	if (RandDir[0] == "Right") {
-		XVelocity = 1; YVelocity = 0;
-	}
-	if (RandDir[0] == "Up") {
-		XVelocity = 0; YVelocity = -1;
-	}
-	if (RandDir[0] == "Down") {
-		XVelocity = 0; YVelocity = 1;
-	}
+	inputs.push(HeadUp,HeadRight,HeadDown,HeadLeft);
 }
 
 function keyPush(evt) {
@@ -155,15 +113,4 @@ function keyPush(evt) {
 			}
 			break;
 	}
-}
-function shuffle(arra1) {
-	var ctr = arra1.length, temp, index;
-	while (ctr > 0) {
-		index = Math.floor(Math.random() * ctr);
-		ctr--;
-		temp = arra1[ctr];
-		arra1[ctr] = arra1[index];
-		arra1[index] = temp;
-	}
-	return arra1;
 }
