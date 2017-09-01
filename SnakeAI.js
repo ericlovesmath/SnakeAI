@@ -1,5 +1,4 @@
-
-FPS = 5;
+FPS = 15;
 window.onload = function () {
 	canv = document.getElementById("gc");
 	ctx = canv.getContext("2d");
@@ -13,8 +12,9 @@ AppleX = AppleY = 15;
 XVelocity = YVelocity = 0;
 trail = [];
 tail = 5;
-ShuffleIndex = [0,1,2];
+ShuffleIndex = [0, 1, 2];
 Direction = "Right"
+
 
 function game() {
 	PlayerX += XVelocity;
@@ -49,7 +49,7 @@ function game() {
 	}
 
 	if (AppleX == PlayerX && AppleY == PlayerY) {
-		tail++ ;
+		tail++;
 		AppleX = Math.floor(Math.random() * tc);
 		AppleY = Math.floor(Math.random() * tc);
 	}
@@ -57,31 +57,48 @@ function game() {
 	ctx.fillRect(AppleX * GridSize, AppleY * GridSize, GridSize - 2, GridSize - 2);
 
 
-	AI();
+	GetInputs();
+	console.log(inputs);
 }
 
-function AI() {
+function GetInputs() {
 	var HeadLeft = HeadRight = HeadUp = HeadDown = 1;
+	inputs = [];
+	FPlayerX = PlayerX + XVelocity;
+	FPlayerY = PlayerY + YVelocity;
+	if (FPlayerX < 0) {
+		FPlayerX = tc - 1;
+	}
+	if (FPlayerX > tc - 1) {
+		FPlayerX = 0;
+	}
+	if (FPlayerY < 0) {
+		FPlayerY = tc - 1;
+	}
+	if (FPlayerY > tc - 1) {
+		FPlayerY = 0;
+	}
+	inputs.push(Math.sqrt(Math.pow(FPlayerX - AppleX, 2) + Math.pow(FPlayerY - AppleY, 2)));
+
 	for (var i = 1; i < trail.length; i++) {
-		//console.log(trail[i].x,trail[i].y,PlayerX,PlayerY);
-		if (trail[i].x == PlayerX && trail[i].y == PlayerY + 1) {
+		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY + 1) {
 			console.log("Down");
 			HeadDown = 0;
 		}
-		if (trail[i].x == PlayerX && trail[i].y == PlayerY - 1) {
+		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY - 1) {
 			HeadUp = 0;
 			console.log("Up");
 		}
-		if (trail[i].x == PlayerX - 1 && trail[i].y == PlayerY) {
+		if (trail[i].x == FPlayerX - 1 && trail[i].y == FPlayerY) {
 			HeadLeft = 0;
 			console.log("Left");
 		}
-		if (trail[i].x == PlayerX + 1 && trail[i].y == PlayerY) {
+		if (trail[i].x == FPlayerX + 1 && trail[i].y == FPlayerY) {
 			HeadRight = 0;
 			console.log("Right");
 		}
 	}
-	console.log(HeadLeft,HeadRight,HeadUp,HeadDown);
+	console.log(HeadLeft, HeadRight, HeadUp, HeadDown);
 	RandDir = [];
 	if (HeadLeft == 1) {
 		RandDir.push("Left");
@@ -140,13 +157,13 @@ function keyPush(evt) {
 	}
 }
 function shuffle(arra1) {
-    var ctr = arra1.length, temp, index;
-    while (ctr > 0) {
-        index = Math.floor(Math.random() * ctr);
-        ctr--;
-        temp = arra1[ctr];
-        arra1[ctr] = arra1[index];
-        arra1[index] = temp;
-    }
-    return arra1;
+	var ctr = arra1.length, temp, index;
+	while (ctr > 0) {
+		index = Math.floor(Math.random() * ctr);
+		ctr--;
+		temp = arra1[ctr];
+		arra1[ctr] = arra1[index];
+		arra1[index] = temp;
+	}
+	return arra1;
 }
