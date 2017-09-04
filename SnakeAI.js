@@ -25,7 +25,7 @@ function game() {
 	ctx.fillStyle = "lime";
 	for (var i = 0; i < trail.length; i++) {
 		ctx.fillRect(trail[i].x * GridSize, trail[i].y * GridSize, GridSize - 2, GridSize - 2);
-		if ((trail[i].x == PlayerX && trail[i].y == PlayerY) || (PlayerX==0) || (PlayerX==tc+1) || (PlayerY==0) || (PlayerY==tc+1)) {
+		if ((trail[i].x == PlayerX && trail[i].y == PlayerY) || (PlayerX == -1) || (PlayerX == tc) || (PlayerY == -1) || (PlayerY == tc)) {
 			tail = 5; trail = [];
 			XVelocity = 1; YVelocity = 0;
 			PlayerX = PlayerY = 10;
@@ -53,21 +53,21 @@ function game() {
 function GetInputs() {
 	var HeadLeft = HeadRight = HeadUp = HeadDown = 0;
 	inputs = [];
-	FPlayerX = PlayerX + XVelocity;
-	FPlayerY = PlayerY + YVelocity;
+	FPlayerX = PlayerX
+	FPlayerY = PlayerY
 	inputs.push(Math.sqrt(Math.pow(FPlayerX - AppleX, 2) + Math.pow(FPlayerY - AppleY, 2)));
-
+	console.log(FPlayerX, FPlayerY);
 	for (var i = 1; i < trail.length; i++) {
-		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY + 1) {
+		if ((trail[i].x == FPlayerX && trail[i].y == FPlayerY + 1) || (FPlayerX <= -1) || (FPlayerX == tc) || (FPlayerY + 1 <= -1) || (FPlayerY + 1 == tc)) {
 			HeadDown = -1;
 		}
-		if (trail[i].x == FPlayerX && trail[i].y == FPlayerY - 1) {
+		if ((trail[i].x == FPlayerX && trail[i].y == FPlayerY - 1) || (FPlayerX <= -1) || (FPlayerX == tc) || (FPlayerY - 1 <= -1) || (FPlayerY - 1 == tc)) {
 			HeadUp = -1;
 		}
-		if (trail[i].x == FPlayerX - 1 && trail[i].y == FPlayerY) {
+		if ((trail[i].x == FPlayerX - 1 && trail[i].y == FPlayerY) || (FPlayerX - 1 <= -1) || (FPlayerX - 1 == tc) || (FPlayerY <= -1) || (FPlayerY == tc)) {
 			HeadLeft = -1;
 		}
-		if (trail[i].x == FPlayerX + 1 && trail[i].y == FPlayerY) {
+		if ((trail[i].x == FPlayerX + 1 && trail[i].y == FPlayerY) || (FPlayerX + 1 <= -1) || (FPlayerX + 1 == tc) || (FPlayerY <= -1) || (FPlayerY == tc)) {
 			HeadRight = -1;
 		}
 		if (AppleX == FPlayerX && AppleY == FPlayerY + 1) {
@@ -83,7 +83,7 @@ function GetInputs() {
 			HeadRight = 1;
 		}
 	}
-	inputs.push(HeadUp,HeadRight,HeadDown,HeadLeft);
+	inputs.push(HeadUp, HeadRight, HeadDown, HeadLeft);
 }
 
 function keyPush(evt) {
